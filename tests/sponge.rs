@@ -6,14 +6,14 @@
 
 #![cfg(feature = "alloc")]
 
-use dusk_bls12_381::BlsScalar;
-use dusk_bytes::ParseHexStr;
-use dusk_plonk::error::Error as PlonkError;
-use dusk_poseidon::sponge;
+use bls12_381::BlsScalar;
+use bytes::ParseHexStr;
+use plonk::error::Error as PlonkError;
+use poseidon::sponge;
 use rand::rngs::{OsRng, StdRng};
 use rand::SeedableRng;
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 
 const TEST_INPUTS: [&str; 32] = [
     "bb67ed265bf1db490ded2e1ede55c0d14c55521509dc73f9c354e98ab76c9625",
@@ -177,7 +177,7 @@ impl Circuit for TestTruncatedCircuit {
         C: Composer,
     {
         let h = sponge::truncated::hash(self.input.as_slice());
-        let p = JubJubAffine::from(dusk_jubjub::GENERATOR_EXTENDED * h);
+        let p = JubJubAffine::from(jubjub::GENERATOR_EXTENDED * h);
         let p = composer.append_point(p);
 
         let i: Vec<Witness> = self
@@ -190,7 +190,7 @@ impl Circuit for TestTruncatedCircuit {
 
         let t = sponge::truncated::gadget(composer, i.as_slice());
         let p_p = composer
-            .component_mul_generator(t, dusk_jubjub::GENERATOR_EXTENDED)
+            .component_mul_generator(t, jubjub::GENERATOR_EXTENDED)
             .expect("Multiplying with the generator should succeed");
 
         composer.assert_equal(t, o);

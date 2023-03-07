@@ -6,11 +6,11 @@
 
 #![cfg(feature = "alloc")]
 
-use dusk_poseidon::tree::{self, PoseidonBranch, PoseidonLeaf, PoseidonTree};
+use poseidon::tree::{self, PoseidonBranch, PoseidonLeaf, PoseidonTree};
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use dusk_plonk::error::Error as PlonkError;
-use dusk_plonk::prelude::*;
+use plonk::error::Error as PlonkError;
+use plonk::prelude::*;
 use nstack::annotation::Keyed;
 use rand::rngs::OsRng;
 use rand::{CryptoRng, RngCore};

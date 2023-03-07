@@ -7,18 +7,18 @@
 #![cfg(feature = "alloc")]
 
 use core::ops::Mul;
-use dusk_bls12_381::BlsScalar;
-use dusk_bytes::Serializable;
-use dusk_jubjub::{
-    dhke, JubJubAffine, JubJubExtended, JubJubScalar, GENERATOR,
+use bls12_381::{Scalar as BlsScalar};
+use bytes::Serializable;
+use jubjub::{
+    dhke, AffinePoint as JubJubAffine, JubJubExtended, Scalar as JubJubScalar, GENERATOR,
     GENERATOR_EXTENDED,
 };
-use dusk_plonk::error::Error as PlonkError;
-use dusk_poseidon::cipher::{self, PoseidonCipher};
+use plonk::error::Error as PlonkError;
+use poseidon::cipher::{self, PoseidonCipher};
 use rand::rngs::{OsRng, StdRng};
 use rand::{RngCore, SeedableRng};
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 
 fn gen() -> (
     [BlsScalar; PoseidonCipher::capacity()],
@@ -55,7 +55,7 @@ fn sanity() {
 
     // The hades permutation cannot be performed if the cipher is bigger than
     // hades width
-    assert!(dusk_hades::WIDTH >= PoseidonCipher::cipher_size());
+    assert!(hades::WIDTH >= PoseidonCipher::cipher_size());
 }
 
 #[test]

@@ -4,9 +4,9 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use dusk_hades::{GadgetStrategy, WIDTH};
+use hades::{GadgetStrategy, WIDTH};
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 
 /// Mirror the implementation of [`hash`] inside of a PLONK circuit.
 ///

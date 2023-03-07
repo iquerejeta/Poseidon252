@@ -8,13 +8,13 @@
 
 mod max_annotation;
 
-use dusk_plonk::error::Error as PlonkError;
-use dusk_poseidon::tree::{self, PoseidonBranch, PoseidonTree};
+use plonk::error::Error as PlonkError;
+use poseidon::tree::{self, PoseidonBranch, PoseidonTree};
 use max_annotation::MockLeaf;
 use rand::rngs::{OsRng, StdRng};
 use rand::{CryptoRng, RngCore, SeedableRng};
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 
 const DEPTH: usize = 17;
 const CAPACITY: usize = 15;

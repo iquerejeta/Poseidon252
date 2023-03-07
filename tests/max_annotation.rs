@@ -7,9 +7,9 @@
 #![cfg(feature = "alloc")]
 
 use core::borrow::Borrow;
-use dusk_bls12_381::BlsScalar;
-use dusk_hades::{ScalarStrategy, Strategy};
-use dusk_poseidon::tree::{PoseidonLeaf, PoseidonTree};
+use bls12_381::BlsScalar;
+use hades::{ScalarStrategy, Strategy};
+use poseidon::tree::{PoseidonLeaf, PoseidonTree};
 use nstack::annotation::Keyed;
 use rand::{CryptoRng, RngCore};
 
@@ -146,7 +146,7 @@ fn tree_branch_leaf() {
     const DEPTH: usize = 17;
 
     let mut h = ScalarStrategy::new();
-    let zero = [BlsScalar::zero(); dusk_hades::WIDTH];
+    let zero = [BlsScalar::zero(); hades::WIDTH];
     let mut perm = zero;
 
     [
@@ -195,7 +195,7 @@ fn tree_branch_depth() {
     let leaf = MockLeaf::from(1);
     tree.push(leaf);
 
-    let mut perm_base = [BlsScalar::zero(); dusk_hades::WIDTH];
+    let mut perm_base = [BlsScalar::zero(); hades::WIDTH];
     perm_base[0] = BlsScalar::one();
     perm_base[1] = leaf.poseidon_hash();
 

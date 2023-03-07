@@ -1,9 +1,8 @@
-![Build Status](https://github.com/dusk-network/Poseidon252/workflows/Continuous%20integration/badge.svg)
-[![Repository](https://img.shields.io/badge/github-poseidon252-blueviolet)](https://github.com/dusk-network/Poseidon252)
-[![Documentation](https://img.shields.io/badge/docs-poseidon252-blue)](https://docs.rs/dusk-poseidon/latest/dusk_poseidon/)
+![Build Status](https://github.com/iquerejeta/Poseidon252/workflows/Continuous%20integration/badge.svg)
+[![Repository](https://img.shields.io/badge/github-poseidon252-blueviolet)](https://github.com/iquerejeta/Poseidon252)
 
 # Dusk-Poseidon
-
+Fork from Dusk Network's [original](https://github.com/dusk-network/Poseidon252) implementation. 
 Reference implementation for the Poseidon Hashing algorithm.
 
 #### Reference
@@ -37,7 +36,7 @@ The module provides two sponge hash implementations:
 - Sponge hash using `Scalar` as backend. Which hashes the inputted `Scalar`s and returns a single
   `Scalar`.
 
-- Sponge hash gadget using `dusk_plonk::Witness` as a backend. This technique is used/required
+- Sponge hash gadget using `plonk::Witness` as a backend. This technique is used/required
   when you want to proof pre-images of unconstrained data inside Zero-Knowledge PLONK circuits.
 
 ## Merkle Hash
@@ -61,7 +60,7 @@ majority of the configurations that the user may need:
   One of them computes the bitflags item while the other assumes that it has already been
   computed and placed in the first Level position.
 
-- `dusk_plonk::Witness` backend for hashing Merkle Tree levels inside ZK-Circuits,
+- `plonk::Witness` backend for hashing Merkle Tree levels inside ZK-Circuits,
   specifically, PLONK circuits. This implementation comes also with two variants;
   One of them computes the bitflags item while the other assumes that it has already been
   computed and placed in the first Level position.
@@ -69,13 +68,13 @@ majority of the configurations that the user may need:
 ### Zero Knowledge Merkle Opening Proof example:
 
 ```rust
-use dusk_plonk::error::Error as PlonkError;
-use dusk_poseidon::tree::{self, PoseidonBranch, PoseidonLeaf, PoseidonTree};
+use plonk::error::Error as PlonkError;
+use poseidon::tree::{self, PoseidonBranch, PoseidonLeaf, PoseidonTree};
 use rand::rngs::OsRng;
 use rand::{CryptoRng, RngCore};
 
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 use nstack::annotation::Keyed;
 
 // Depth of the merkle tree

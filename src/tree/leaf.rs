@@ -4,7 +4,7 @@
 //
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
-use dusk_bls12_381::BlsScalar;
+use bls12_381::{Scalar as BlsScalar};
 
 /// A struct that will be used as a poseidon tree leaf must implement this
 /// trait.

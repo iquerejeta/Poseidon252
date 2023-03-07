@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implement `dusk_bytes::Serializable` for `PoseidonBranch` and `PoseidonLevel` [#203]
+- Implement `bytes::Serializable` for `PoseidonBranch` and `PoseidonLevel` [#203]
 - Add benchmarks for merkle opening proof [#197]
 
 ### Changed

@@ -14,8 +14,8 @@ use crate::tree::PoseidonLeaf;
 
 use core::borrow::Borrow;
 
-use dusk_bls12_381::BlsScalar;
-use dusk_hades::{ScalarStrategy, Strategy};
+use bls12_381::BlsScalar;
+use hades::{ScalarStrategy, Strategy};
 
 use nstack::annotation::{Cardinality, Keyed, MaxKey};
 use nstack::NStack;
@@ -55,7 +55,7 @@ where
     K: Clone + PartialOrd,
 {
     fn from_child(stack: &NStack<L, PoseidonAnnotation<K>>) -> Self {
-        let mut perm = [BlsScalar::zero(); dusk_hades::WIDTH];
+        let mut perm = [BlsScalar::zero(); hades::WIDTH];
         let mut flag = 1;
         let mut mask = 0;
         let mut cardinality = 0;

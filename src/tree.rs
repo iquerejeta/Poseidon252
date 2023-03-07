@@ -26,7 +26,7 @@ pub use zk::merkle_opening;
 
 use core::borrow::Borrow;
 
-use dusk_bls12_381::BlsScalar;
+use bls12_381::{Scalar as BlsScalar};
 use microkelvin::{Branch, Walker};
 use nstack::annotation::{Cardinality, Keyed};
 use nstack::NStack;

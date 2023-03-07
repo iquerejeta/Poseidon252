@@ -5,9 +5,9 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use super::PoseidonBranch;
-use dusk_hades::GadgetStrategy;
+use hades::GadgetStrategy;
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 
 /// Perform a merkle opening for a given branch and return the calculated root
 pub fn merkle_opening<C, const DEPTH: usize>(
@@ -19,7 +19,7 @@ where
     C: Composer,
 {
     // Generate a permutation container
-    let mut container = [C::ZERO; dusk_hades::WIDTH];
+    let mut container = [C::ZERO; hades::WIDTH];
 
     // Recalculate the root for the given branch
     (0..DEPTH).fold(leaf, |root, depth| {
@@ -29,7 +29,7 @@ where
         // and make sure that offset points to a hash in the level
         let offset_flag = level.offset_flag();
         let mut sum = C::ZERO;
-        let mut offset_bits = [C::ZERO; dusk_hades::WIDTH - 1];
+        let mut offset_bits = [C::ZERO; hades::WIDTH - 1];
         offset_bits.iter_mut().fold(1, |mask, bit| {
             let bit_bls = BlsScalar::from((offset_flag & mask).min(1));
             *bit = composer.append_witness(bit_bls);
@@ -43,7 +43,7 @@ where
 
         // Check that the root of the previous level is the same value as what
         // is stored in the level at the offset
-        for i in 0..dusk_hades::WIDTH {
+        for i in 0..hades::WIDTH {
             // Load child hashes of the current level into the permutation
             // container
             container[i] = composer.append_witness(level.as_ref()[i]);
@@ -74,7 +74,7 @@ where
 mod tests {
     use super::*;
 
-    use dusk_plonk::error::Error as PlonkError;
+    use plonk::error::Error as PlonkError;
     use nstack::annotation::Keyed;
     use rand::rngs::OsRng;
     use rand::rngs::StdRng;
@@ -221,7 +221,7 @@ mod tests {
         let mut rng = StdRng::seed_from_u64(0xfeeb);
 
         for depth in 0..DEPTH {
-            for offset in 1..dusk_hades::WIDTH {
+            for offset in 1..hades::WIDTH {
                 circuit.branch.path[depth].level[offset] =
                     BlsScalar::random(&mut OsRng);
             }

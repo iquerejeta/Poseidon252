@@ -6,8 +6,8 @@
 
 //! Sponge hash and gadget definition
 
-use dusk_bls12_381::BlsScalar;
-use dusk_hades::{ScalarStrategy, Strategy, WIDTH};
+use bls12_381::{Scalar as BlsScalar};
+use hades::{ScalarStrategy, Strategy, WIDTH};
 
 /// The `hash` function takes an arbitrary number of Scalars and returns the
 /// hash, using the `Hades` ScalarStrategy.

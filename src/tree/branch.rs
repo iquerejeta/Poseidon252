@@ -11,9 +11,9 @@ use crate::tree::PoseidonAnnotation;
 use core::borrow::Borrow;
 use core::ops::Deref;
 
-use dusk_bls12_381::BlsScalar;
-use dusk_bytes::{DeserializableSlice, Serializable};
-use dusk_hades::{ScalarStrategy, Strategy};
+use bls12_381::{Scalar as BlsScalar};
+use bytes::{DeserializableSlice, Serializable};
+use hades::{ScalarStrategy, Strategy};
 use microkelvin::Branch;
 use nstack::annotation::Keyed;
 use nstack::NStack;
@@ -31,7 +31,7 @@ use rkyv::{Archive, Deserialize, Serialize};
     archive_attr(derive(CheckBytes))
 )]
 pub struct PoseidonLevel {
-    pub(crate) level: [BlsScalar; dusk_hades::WIDTH],
+    pub(crate) level: [BlsScalar; hades::WIDTH],
     index: u64,
 }
 
@@ -55,10 +55,10 @@ impl PoseidonLevel {
     }
 }
 
-impl Serializable<{ BlsScalar::SIZE * dusk_hades::WIDTH + u64::SIZE }>
+impl Serializable<{ BlsScalar::SIZE * hades::WIDTH + u64::SIZE }>
     for PoseidonLevel
 {
-    type Error = dusk_bytes::Error;
+    type Error = bytes::Error;
 
     fn from_bytes(buf: &[u8; Self::SIZE]) -> Result<Self, Self::Error>
     where
@@ -66,7 +66,7 @@ impl Serializable<{ BlsScalar::SIZE * dusk_hades::WIDTH + u64::SIZE }>
     {
         let mut bytes = &buf[..];
 
-        let mut level = [BlsScalar::zero(); dusk_hades::WIDTH];
+        let mut level = [BlsScalar::zero(); hades::WIDTH];
         for scalar in level.iter_mut() {
             *scalar = BlsScalar::from_reader(&mut bytes)?;
         }
@@ -84,7 +84,7 @@ impl Serializable<{ BlsScalar::SIZE * dusk_hades::WIDTH + u64::SIZE }>
                 .copy_from_slice(&scalar.to_bytes());
         }
 
-        buf[BlsScalar::SIZE * dusk_hades::WIDTH..]
+        buf[BlsScalar::SIZE * hades::WIDTH..]
             .copy_from_slice(&self.index.to_bytes());
 
         buf
@@ -125,7 +125,7 @@ macro_rules! serializable_branch {
         $(impl Serializable<{ PoseidonLevel::SIZE * $depth + BlsScalar::SIZE }>
             for PoseidonBranch<$depth>
         {
-            type Error = dusk_bytes::Error;
+            type Error = bytes::Error;
 
             fn from_bytes(buf: &[u8; Self::SIZE]) -> Result<Self, Self::Error>
             where
@@ -257,7 +257,7 @@ where
 
         if nstack_depth < DEPTH {
             let level = path[nstack_depth - 1].level;
-            let mut perm = [BlsScalar::zero(); dusk_hades::WIDTH];
+            let mut perm = [BlsScalar::zero(); hades::WIDTH];
 
             let mut h = ScalarStrategy::new();
 
@@ -277,7 +277,7 @@ where
         //  should be more ergonomic.
 
         // Calculate the root
-        let mut perm = [BlsScalar::zero(); dusk_hades::WIDTH];
+        let mut perm = [BlsScalar::zero(); hades::WIDTH];
         let mut h = ScalarStrategy::new();
 
         perm.copy_from_slice(&path[DEPTH - 1].level);
@@ -295,8 +295,8 @@ where
 mod tests {
     use crate::tree::{PoseidonBranch, PoseidonLevel};
 
-    use dusk_bls12_381::BlsScalar;
-    use dusk_bytes::Serializable;
+    use bls12_381::BlsScalar;
+    use bytes::Serializable;
 
     #[test]
     fn branch_serde() {

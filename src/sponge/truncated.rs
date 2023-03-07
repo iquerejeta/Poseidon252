@@ -7,13 +7,12 @@
 //! Sponge hash and gadget definition
 
 use crate::sponge;
-use dusk_bls12_381::BlsScalar;
-
-use dusk_plonk::prelude::*;
+use bls12_381::{Scalar as BlsScalar};
+use jubjub::{Scalar as JubJubScalar};
 
 /// The constant represents the bitmask used to truncate the hashing results of
 /// a sponge application so that they fit inside of a
-/// [`dusk_jubjub::JubJubScalar`] and it's equal to `2^250 - 1`.
+/// [`JubJubScalar`] and it's equal to `2^250 - 1`.
 ///
 /// Let the bitmask size be `m`
 /// Considering the field size of jubjub is 251 bits, `m < 251`
@@ -25,7 +24,7 @@ use dusk_plonk::prelude::*;
 ///
 /// This way, the scalar will be truncated to `m = r - d = 255 - 6 = 249
 /// bits`
-const TRUNCATION_LIMIT: BlsScalar = BlsScalar([
+const TRUNCATION_LIMIT: BlsScalar = BlsScalar::from_raw([
     0x432667a3f7cfca74,
     0x7905486e121a84be,
     0x19c02884cfe90d12,
@@ -37,32 +36,13 @@ const TRUNCATION_LIMIT: BlsScalar = BlsScalar([
 ///
 /// [`hash`]: crate::sponge::hash
 pub fn hash(messages: &[BlsScalar]) -> JubJubScalar {
-    JubJubScalar::from_raw(
-        (sponge::hash(messages) & TRUNCATION_LIMIT).reduce().0,
-    )
-}
-
-/// Mirror the implementation of [`hash`] inside of a PLONK circuit.
-///
-/// The circuit will be defined by the length of `messages`. This means that a
-/// pre-computed circuit will not behave generically for different messages
-/// sizes.
-///
-/// The expected usage is the length of the message to be known publicly as the
-/// circuit definition. Hence, the padding value `1` will be appended as a
-/// circuit description.
-///
-/// The returned value is the hashed witness data computed as a variable and
-/// truncated to fit inside of a [`JubJubScalar`].
-///
-/// [`hash`]: crate::sponge::hash
-#[cfg(feature = "alloc")]
-pub fn gadget<C>(composer: &mut C, message: &[Witness]) -> Witness
-where
-    C: Composer,
-{
-    let h = sponge::gadget(composer, message);
-
-    // Truncate to 250 bits
-    composer.append_logic_xor(h, C::ZERO, 250)
+    // Putting here the implementation of `BitAnd` available in dusk-network's lib. https://github.com/dusk-network/bls12_381/blob/master/src/scalar.rs#L286
+    // todo: Why are they doing this?
+    let sponge_result = sponge::hash(messages).to_bytes();
+    let trunc_lim = TRUNCATION_LIMIT.to_bytes();
+    let mut result = [0u8; 32];
+    result.copy_from_slice(&sponge_result.iter().zip(trunc_lim.iter()).map(|(res, lim)| res & lim).collect::<Vec<u8>>());
+    JubJubScalar::from_bytes(
+        &result
+    ).unwrap()
 }

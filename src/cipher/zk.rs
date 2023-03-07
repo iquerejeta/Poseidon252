@@ -5,9 +5,9 @@
 // Copyright (c) DUSK NETWORK. All rights reserved.
 
 use crate::cipher::PoseidonCipher;
-use dusk_hades::GadgetStrategy;
+use hades::GadgetStrategy;
 
-use dusk_plonk::prelude::*;
+use plonk::prelude::*;
 
 impl PoseidonCipher {
     /// Returns the initial state of the encryption within a composer circuit
@@ -16,7 +16,7 @@ impl PoseidonCipher {
         ks0: Witness,
         ks1: Witness,
         nonce: Witness,
-    ) -> [Witness; dusk_hades::WIDTH]
+    ) -> [Witness; hades::WIDTH]
     where
         C: Composer,
     {

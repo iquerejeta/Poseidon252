@@ -7,8 +7,8 @@
 #![cfg(feature = "alloc")]
 
 use core::borrow::Borrow;
-use dusk_bls12_381::BlsScalar;
-use dusk_poseidon::tree::{PoseidonLeaf, PoseidonTree};
+use bls12_381::{Scalar as BlsScalar};
+use poseidon::tree::{PoseidonLeaf, PoseidonTree};
 use microkelvin::{Child, Compound, Step, Walk, Walker};
 use nstack::annotation::{Keyed, MaxKey};
 use ranno::Annotation;
